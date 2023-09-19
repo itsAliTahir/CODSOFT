@@ -24,6 +24,12 @@ class ProviderClass with ChangeNotifier {
     Categories("Others", false, itemColor7, 0),
   ];
 
+  void listInitializer() {
+    Future<List<MyTasks>> tempList = getData();
+
+    notifyListeners();
+  }
+
   List<MyTasks> get tasks {
     _myTasksList.sort((a, b) => a.isCompleted.compareTo(b.isCompleted));
     return [..._myTasksList];
