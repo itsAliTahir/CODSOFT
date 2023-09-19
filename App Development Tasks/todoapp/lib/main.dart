@@ -13,7 +13,7 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-  dBhelper();
+  dBmaker();
   runApp(const MyApp());
 }
 

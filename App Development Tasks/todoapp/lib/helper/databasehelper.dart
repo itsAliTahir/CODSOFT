@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
-
 import '../models/datamodels.dart';
 
 var db;
-void dBhelper() async {
+void dBmaker() async {
   WidgetsFlutterBinding.ensureInitialized();
   //connection and creation
   db = openDatabase(
@@ -27,6 +26,25 @@ void dBhelper() async {
     //version is used to execute onCreate and make database upgrades and downgrades.
     version: 1,
   );
+}
+
+Future<List<MyTasks>> getData() async {
+  final curDB = await db;
+  //query to get all students into a Map list
+  final List<Map<String, dynamic>> taskMaps = await curDB.query('Tasks');
+  //converting the map list to student list
+  List<MyTasks> initialList = [];
+  for (var taskMap in taskMaps) {
+    initialList.add(MyTasks(
+      taskMap['Title'],
+      taskMap['Description'],
+      taskMap['Category'],
+      taskMap['isCompleted'],
+      false,
+      taskMap['Repeat'],
+    ));
+  }
+  return initialList;
 }
 
 Future<void> insertStudent(MyTasks myTask) async {
