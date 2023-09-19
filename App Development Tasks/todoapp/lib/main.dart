@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'helper/databasehelper.dart';
 import 'screens/addnewtaskscreen.dart';
 import 'screens/splashscreen.dart';
 import 'provider/dataprovider.dart';
@@ -12,6 +13,7 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
+  dBhelper();
   runApp(const MyApp());
 }
 
