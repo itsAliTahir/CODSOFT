@@ -9,6 +9,15 @@ class MyTasks {
   int repeatType; // 0 = one time, 1 = daily, 2 = weekdays, 3 = weekend
   MyTasks(this.title, this.description, this.category, this.isCompleted,
       this.isSelected, this.repeatType);
+  Map<String, dynamic> mapTask() {
+    return {
+      'Title': title,
+      'Description': description,
+      'Category': category,
+      'isCompleted': isCompleted,
+      'Repeat': repeatType,
+    };
+  }
 }
 
 class Categories {

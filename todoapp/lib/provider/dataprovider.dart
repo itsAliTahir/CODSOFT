@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
+import '../helper/databasehelper.dart';
 import '../models/datamodels.dart';
 
 class ProviderClass with ChangeNotifier {
@@ -32,9 +33,12 @@ class ProviderClass with ChangeNotifier {
     return [..._myCategoriesList];
   }
 
-  void addItems(MyTasks inputItems) {
+  addItems(MyTasks inputItems) {
+    //
     _myTasksList.add(inputItems);
+    insertStudent(inputItems);
     notifyListeners();
+    //
   }
 
   void updateItem(MyTasks inputItems, int index) {
