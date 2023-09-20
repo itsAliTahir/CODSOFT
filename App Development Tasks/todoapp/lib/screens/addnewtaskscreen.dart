@@ -35,6 +35,7 @@ class _MyAddNewTaskScreenState extends State<MyAddNewTaskScreen> {
       firstBuild = false;
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: pageWidth,
         height: pageHeight,
@@ -307,12 +308,13 @@ class _MyAddNewTaskScreenState extends State<MyAddNewTaskScreen> {
                                         listen: false)
                                     .editItem(
                                         MyTasks(
-                                          titleController.text,
-                                          descriptionController.text,
-                                          selectedCategories,
-                                          0,
-                                          false,
-                                          repeat,
+                                          title: titleController.text,
+                                          description:
+                                              descriptionController.text,
+                                          category: selectedCategories,
+                                          isCompleted: 0,
+                                          isSelected: false,
+                                          repeatType: repeat,
                                         ),
                                         arguments[2]);
                                 Navigator.of(context).pop();
@@ -321,12 +323,12 @@ class _MyAddNewTaskScreenState extends State<MyAddNewTaskScreen> {
                               Provider.of<ProviderClass>(context, listen: false)
                                   .addItems(
                                 MyTasks(
-                                  titleController.text,
-                                  descriptionController.text,
-                                  selectedCategories,
-                                  0,
-                                  false,
-                                  repeat,
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                  category: selectedCategories,
+                                  isCompleted: 0,
+                                  isSelected: false,
+                                  repeatType: repeat,
                                 ),
                               );
                               Navigator.of(context).pop();

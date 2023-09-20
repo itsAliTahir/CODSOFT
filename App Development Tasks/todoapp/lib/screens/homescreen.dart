@@ -32,7 +32,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     }
 
     return Scaffold(
-      // backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: SizedBox(
         width: pageWidth,
         height: pageHeight,

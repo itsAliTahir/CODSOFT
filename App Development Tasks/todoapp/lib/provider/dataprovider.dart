@@ -6,12 +6,34 @@ import '../models/datamodels.dart';
 class ProviderClass with ChangeNotifier {
   int selectedMethod = -1;
   final List<MyTasks> _myTasksList = [
-    MyTasks("Dentist appointment", " ", "-1------", 1, false, 0),
-    MyTasks(
-        "Groceries", "Pasta Sauce, Noodles, Milk,", "---3----", 0, false, 0),
-    MyTasks("Meeting with client", "2:00 PM in the Office", "----456-", 0,
-        false, 1),
-    MyTasks("Gym", "At 8:30 PM", "-12-----", 0, false, 1),
+    // MyTasks(
+    //     title: "Dentist appointment",
+    //     description: " ",
+    //     category: "-1------",
+    //     isCompleted: 1,
+    //     isSelected: false,
+    //     repeatType: 0),
+    // MyTasks(
+    //     title: "Groceries",
+    //     description: "Pasta Sauce, Noodles, Milk,",
+    //     category: "---3----",
+    //     isCompleted: 0,
+    //     isSelected: false,
+    //     repeatType: 0),
+    // MyTasks(
+    //     title: "Meeting with client",
+    //     description: "2:00 PM in the Office",
+    //     category: "----456-",
+    //     isCompleted: 0,
+    //     isSelected: false,
+    //     repeatType: 1),
+    // MyTasks(
+    //     title: "Gym",
+    //     description: "At 8:30 PM",
+    //     category: "-12-----",
+    //     isCompleted: 0,
+    //     isSelected: false,
+    //     repeatType: 1),
   ];
 
   final List<Categories> _myCategoriesList = [
@@ -24,12 +46,6 @@ class ProviderClass with ChangeNotifier {
     Categories("Others", false, itemColor7, 0),
   ];
 
-  void listInitializer() {
-    Future<List<MyTasks>> tempList = getData();
-
-    notifyListeners();
-  }
-
   List<MyTasks> get tasks {
     _myTasksList.sort((a, b) => a.isCompleted.compareTo(b.isCompleted));
     return [..._myTasksList];
@@ -39,10 +55,22 @@ class ProviderClass with ChangeNotifier {
     return [..._myCategoriesList];
   }
 
+  Future<void> initializeList() async {
+    try {
+      List<MyTasks> tempList = await DatabaseHelper.instance.getData();
+      for (int i = 0; i < tempList.length; i++) {
+        _myTasksList.add(tempList[i]);
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print("Couldn't Fetch Data");
+    }
+  }
+
   addItems(MyTasks inputItems) {
     //
     _myTasksList.add(inputItems);
-    insertStudent(inputItems);
+    DatabaseHelper.instance.addIntoDatabase(inputItems);
     notifyListeners();
     //
   }
@@ -57,11 +85,14 @@ class ProviderClass with ChangeNotifier {
   }
 
   void editItem(MyTasks inputItems, int index) {
+    DatabaseHelper.instance.updateDatabase(_myTasksList[index], inputItems);
     _myTasksList[index] = inputItems;
     notifyListeners();
   }
 
   void deleteItem(int index) {
+    print(_myTasksList[index].title);
+    DatabaseHelper.instance.deleteFromDatabase(_myTasksList[index]);
     _myTasksList.removeAt(index);
     notifyListeners();
   }
