@@ -50,12 +50,14 @@ class _MyTasksListState extends State<MyTasksList> {
                             Provider.of<ProviderClass>(context, listen: false)
                                 .updateItem(
                                     MyTasks(
-                                        " ",
-                                        " ",
-                                        " ",
-                                        myTasksList[index].isCompleted,
-                                        !myTasksList[index].isSelected,
-                                        0),
+                                        title: " ",
+                                        category: " ",
+                                        description: " ",
+                                        isCompleted:
+                                            myTasksList[index].isCompleted,
+                                        isSelected:
+                                            !myTasksList[index].isSelected,
+                                        repeatType: 0),
                                     index);
                           },
                           onTap: () {
@@ -63,12 +65,13 @@ class _MyTasksListState extends State<MyTasksList> {
                               Provider.of<ProviderClass>(context, listen: false)
                                   .updateItem(
                                       MyTasks(
-                                          " ",
-                                          " ",
-                                          " ",
-                                          myTasksList[index].isCompleted,
-                                          false,
-                                          0),
+                                          category: " ",
+                                          description: " ",
+                                          title: " ",
+                                          isCompleted:
+                                              myTasksList[index].isCompleted,
+                                          isSelected: false,
+                                          repeatType: 0),
                                       index);
                               return;
                             }
@@ -121,14 +124,18 @@ class _MyTasksListState extends State<MyTasksList> {
                                                         listen: false)
                                                     .updateItem(
                                                         MyTasks(
-                                                            " ",
-                                                            " ",
-                                                            myTasksList[index]
-                                                                .category,
-                                                            0,
-                                                            myTasksList[index]
-                                                                .isSelected,
-                                                            0),
+                                                            title: " ",
+                                                            description: " ",
+                                                            category:
+                                                                myTasksList[
+                                                                        index]
+                                                                    .category,
+                                                            isCompleted: 0,
+                                                            isSelected:
+                                                                myTasksList[
+                                                                        index]
+                                                                    .isSelected,
+                                                            repeatType: 0),
                                                         index);
                                               } else {
                                                 Provider.of<ProviderClass>(
@@ -136,14 +143,18 @@ class _MyTasksListState extends State<MyTasksList> {
                                                         listen: false)
                                                     .updateItem(
                                                         MyTasks(
-                                                            " ",
-                                                            " ",
-                                                            myTasksList[index]
-                                                                .category,
-                                                            1,
-                                                            myTasksList[index]
-                                                                .isSelected,
-                                                            0),
+                                                            title: " ",
+                                                            description: " ",
+                                                            category:
+                                                                myTasksList[
+                                                                        index]
+                                                                    .category,
+                                                            isCompleted: 1,
+                                                            isSelected:
+                                                                myTasksList[
+                                                                        index]
+                                                                    .isSelected,
+                                                            repeatType: 0),
                                                         index);
                                               }
                                             },

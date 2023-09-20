@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:todolist_app/constants.dart';
 import 'package:todolist_app/provider/dataprovider.dart';
 
+import '../helper/databasehelper.dart';
+
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
 
@@ -20,9 +22,15 @@ class _MySplashScreenState extends State<MySplashScreen> {
     });
   }
 
+  int buildScreen = 1;
   @override
   Widget build(BuildContext context) {
-    Provider.of<ProviderClass>(context).listInitializer();
+    if (buildScreen == 1) {
+      Provider.of<ProviderClass>(context).initializeList();
+      buildScreen++;
+    }
+
+    DatabaseHelper.instance.getData();
     return Scaffold(
         body: Container(
             width: MediaQuery.of(context).size.width,

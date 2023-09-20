@@ -151,7 +151,15 @@ class _MyUpperHomeState extends State<MyUpperHome>
                       Provider.of<ProviderClass>(context, listen: false)
                           .selectCategory(-2);
                       widget.addNewTaskScreen(
-                          MyTasks(" ", " ", " ", 0, false, 0), 0, -1);
+                          MyTasks(
+                              title: " ",
+                              category: " ",
+                              description: " ",
+                              isCompleted: 0,
+                              isSelected: false,
+                              repeatType: 0),
+                          0,
+                          -1);
                     },
                     child: const Icon(
                       Icons.add,
@@ -410,59 +418,6 @@ class _MyUpperHomeState extends State<MyUpperHome>
                         ],
                       ),
                     ),
-                    // child: Container(
-                    //   color: Colors.red,
-                    // width: pageWidth * 0.7,
-                    // height: (pageHeight * 0.29) * (2 / 3),
-                    //   child: DefaultTabController(
-                    //     length: 2,
-                    //     child: TabBarView(
-                    //       controller: tabController,
-                    //       physics: AlwaysScrollableScrollPhysics(),
-                    //       children: [
-                    // SingleChildScrollView(
-                    //   child: Container(
-                    //     color: Colors.yellow,
-                    //     width: pageWidth * 0.7,
-                    //     height: (pageHeight * 0.29) * (2 / 3),
-                    //   ),
-                    // ),
-                    // SingleChildScrollView(
-                    //   child: Container(
-                    //       color: Colors.red,
-                    //       width: pageWidth * 0.7,
-                    //       height: (pageHeight * 0.29) * (2 / 3),
-                    //       child: Stack(children: [
-                    //         Positioned(
-                    //           top: 0,
-                    //           left: 0,
-                    //           child: CategoryBox(0, Alignment.centerLeft,
-                    //               Icons.work_outline_rounded),
-                    //         ),
-                    //         Positioned(
-                    //           top: 0,
-                    //           right: 0,
-                    //           child: CategoryBox(1, Alignment.centerRight,
-                    //               Icons.health_and_safety_outlined),
-                    //         ),
-                    //         Positioned(
-                    //           bottom: 0,
-                    //           left: 0,
-                    //           child: CategoryBox(2, Alignment.bottomLeft,
-                    //               Icons.person_outline_rounded),
-                    //         ),
-                    //         Positioned(
-                    //           bottom: 0,
-                    //           right: 0,
-                    //           child: CategoryBox(3, Alignment.bottomRight,
-                    //               Icons.linear_scale_rounded),
-                    //         ),
-                    //       ])),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ),
                 ),
               ]),

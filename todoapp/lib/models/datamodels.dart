@@ -7,9 +7,24 @@ class MyTasks {
   int isCompleted; // 0 = false, 1 = true
   bool isSelected;
   int repeatType; // 0 = one time, 1 = daily, 2 = weekdays, 3 = weekend
-  MyTasks(this.title, this.description, this.category, this.isCompleted,
-      this.isSelected, this.repeatType);
-  Map<String, dynamic> mapTask() {
+  MyTasks(
+      {required this.title,
+      required this.description,
+      required this.category,
+      required this.isCompleted,
+      required this.isSelected,
+      required this.repeatType});
+
+  factory MyTasks.fromMap(Map<String, dynamic> json) => new MyTasks(
+        title: json['Title'],
+        description: json['Description'],
+        category: json['Category'],
+        isCompleted: json['isCompleted'],
+        isSelected: false,
+        repeatType: json['Repeat'],
+      );
+
+  Map<String, dynamic> toMap() {
     return {
       'Title': title,
       'Description': description,
