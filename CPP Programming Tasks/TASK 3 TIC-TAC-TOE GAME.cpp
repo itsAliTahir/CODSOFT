@@ -15,18 +15,17 @@ int player1Wins = 0;
 int player2Wins = 0;
 int draws = 0;
 int isActive = 1;
-string bottomString = "    Red Turn  (x) ";
+string bottomString = "    Red's Turn  (x) ";
 bool p1turn = true;
 bool beepSound = true;
-
 int main(){
+	
 	for (;;){
 		system("CLS");
 		topMenu();
 		cout <<endl;
 	}
 }
-
 void topMenu(){
 	HANDLE console_color;
     console_color = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -43,8 +42,10 @@ void topMenu(){
 	cout << "\t\t\tRound: "<< player1Wins+player2Wins+draws+isActive <<endl <<endl<<endl;
 	grid();
 	bottomText();
+	
 	cout << "--------------------------------------------------------\n\n";
-	if(isActive == 1){
+	if(isActive == 1)
+	{
 		beepSound = true;
 		turnIndicator();
 	}
@@ -119,10 +120,10 @@ void turnIndicator(){
 		}
 	}
 	if (p1turn == true){
-		bottomString = "    Red Turn  (x) ";
+		bottomString = "    Red's Turn  (x) ";
 	}
 	else{
-		bottomString = "    Blue Turn  (o) ";
+		bottomString = "    Blue's Turn  (o) ";
 	}
 	if (beepSound == true){
 		beepSound = false;
@@ -276,6 +277,7 @@ void winChecker(){
 			player2Wins++;
 		}
 	}
+	
 	else if(gridEnteries[0]!='1' && gridEnteries[1]!='2' && gridEnteries[2]!='3' && gridEnteries[3]!='4' && gridEnteries[4]!='5' && gridEnteries[5]!='6' && gridEnteries[6]!='7' && gridEnteries[7]!='8' && gridEnteries[8]!='9'){
 		bottomString = "     Game Draw";
 		draws++;
@@ -286,13 +288,15 @@ void winChecker(){
 void bottomText(){
 	HANDLE console_color;
     console_color = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (bottomString == "     Blue Wins" || bottomString == "     Game Draw" || bottomString == "      Red Wins"){
+	if (bottomString == "     Blue Wins" || bottomString == "     Game Draw" || bottomString == "      Red Wins")
+	{
 		SetConsoleTextAttribute(console_color, 10);
 	}
-	else if(bottomString == "    Red Turn  (x) " ){
+	else if(bottomString == "    Red's Turn  (x) ") {
 		SetConsoleTextAttribute(console_color, 12);
 	}
-	else if(bottomString == "    Blue Turn  (o) "){
+	else if(bottomString == "    Blue's Turn  (o) ")
+	{
 		SetConsoleTextAttribute(console_color, 9);
 	}
 	cout << "\n\t\t  " << bottomString<<endl;
@@ -302,7 +306,8 @@ void bottomText(){
 
 void nextRound(){
 	HANDLE console_color;
-    console_color = GetStdHandle(STD_OUTPUT_HANDLE);  
+    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+    
 	cout << " Press ";
 	SetConsoleTextAttribute(console_color, 6);
 	cout << "'Y'";
@@ -316,11 +321,11 @@ void nextRound(){
 		}
 		if (p1turn == true){
 			isActive = 1;
-			bottomString = "    Red Turn  (x) ";
+			bottomString = "    Red's Turn  (x) ";
 		}
 		else{
 			isActive = 1;
-			bottomString = "    Blue Turn  (o) ";
+			bottomString = "    Blue's Turn  (o) ";
 		}
 	}
 }
