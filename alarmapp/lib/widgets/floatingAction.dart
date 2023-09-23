@@ -2,14 +2,12 @@ import 'package:alarmapp/constants.dart';
 import 'package:alarmapp/models/alarms.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyFloatingActionButton extends StatelessWidget {
-  Function AlarmDialogue;
+  Function alarmDialogue;
   Function deleteAlarmFun;
 
-  MyFloatingActionButton(
-    this.AlarmDialogue,
-    this.deleteAlarmFun,
-  );
+  MyFloatingActionButton(this.alarmDialogue, this.deleteAlarmFun, {super.key});
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
@@ -28,7 +26,7 @@ class MyFloatingActionButton extends StatelessWidget {
         for (int i = 0; i < myAlarms.length; i++) {
           myAlarms[i].isEditable = false;
         }
-        AlarmDialogue();
+        alarmDialogue();
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),

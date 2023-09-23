@@ -4,7 +4,9 @@ import 'package:alarmapp/widgets/weekdaysSelectorSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'RingtoneSelectorSheet.dart';
+import '../helper/databasehelper.dart';
 
+// ignore: must_be_immutable
 class MyAddAlarm extends StatefulWidget {
   Function remakeState;
   MyAddAlarm(this.remakeState, {super.key});
@@ -15,8 +17,8 @@ class MyAddAlarm extends StatefulWidget {
 
 class _MyAddAlarmState extends State<MyAddAlarm> {
   TimeOfDay tempTimeofDay = const TimeOfDay(hour: 6, minute: 0);
-  double tempVolume = 50;
-  String tempRingtone = AvailableTones[0];
+  double tempVolume = 70;
+  String tempRingtone = AvailableTones[0].name;
   String tempWeekDay = "MTWTF--";
   void _presentTimePicker() {
     showTimePicker(
@@ -58,7 +60,8 @@ class _MyAddAlarmState extends State<MyAddAlarm> {
         return;
       }
       setState(() {
-        tempTimeofDay = pickedTime;
+        tempTimeofDay =
+            TimeOfDay(hour: pickedTime.hour, minute: pickedTime.minute);
       });
     });
   }
@@ -72,7 +75,7 @@ class _MyAddAlarmState extends State<MyAddAlarm> {
             color: Colors.transparent,
             height: 200,
             child: MyEditRingtoneSheet(index, (int i) {
-              tempRingtone = AvailableTones[i];
+              tempRingtone = AvailableTones[i].name;
               widget.remakeState(-1);
               setState(() {});
             }),
@@ -160,7 +163,7 @@ class _MyAddAlarmState extends State<MyAddAlarm> {
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 40,
-                            fontFamily: "TiltNeon"),
+                            fontFamily: "digital-7"),
                       ),
                       const SizedBox(
                         width: 7,
@@ -453,6 +456,7 @@ class _MyAddAlarmState extends State<MyAddAlarm> {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: tertiaryColor)),
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
                         splashColor: secondaryColor,
                         splashFactory: InkRipple.splashFactory,
                         onTap: () {
@@ -475,18 +479,23 @@ class _MyAddAlarmState extends State<MyAddAlarm> {
                           color: mainColor,
                           borderRadius: BorderRadius.circular(10)),
                       child: InkWell(
-                        splashColor: mainColorDim,
+                        borderRadius: BorderRadius.circular(10),
+                        splashColor: const Color.fromARGB(255, 0, 83, 152),
                         splashFactory: InkRipple.splashFactory,
                         onTap: () {
                           var obj = Alarms(
-                              const Uuid().toString(),
-                              tempTimeofDay,
-                              tempWeekDay,
-                              tempRingtone,
-                              true,
-                              tempVolume,
-                              false);
+                              id: const Uuid().v4().toString(),
+                              alarmHour: tempTimeofDay.hour,
+                              alarmMin: tempTimeofDay.minute,
+                              alarmDays: tempWeekDay,
+                              alarmTone: tempRingtone,
+                              isEnable: 1,
+                              volume: tempVolume,
+                              isEditable: false);
+
                           myAlarms.add(obj);
+                          DatabaseHelper.instance.addIntoDatabase(obj);
+
                           widget.remakeState(-1);
                           Navigator.of(context).pop();
                         },

@@ -1,12 +1,13 @@
-// ignore: file_names
 import 'package:alarmapp/constants.dart';
+import 'package:alarmapp/helper/databasehelper.dart';
 import 'package:flutter/material.dart';
 import '../models/alarms.dart';
 
+// ignore: must_be_immutable
 class MyAlarmsList extends StatefulWidget {
   Function editRingtuneFun;
   Function remakeState;
-  MyAlarmsList(this.editRingtuneFun, this.remakeState);
+  MyAlarmsList(this.editRingtuneFun, this.remakeState, {super.key});
 
   @override
   State<MyAlarmsList> createState() => _MyAlarmsListState();
@@ -47,13 +48,16 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                         borderRadius: BorderRadius.circular(50)))),
           ),
           child: child!),
-      initialTime: myAlarms[index].alarmTime,
+      initialTime: TimeOfDay(
+          hour: myAlarms[index].alarmHour, minute: myAlarms[index].alarmMin),
     ).then((pickedTime) {
       if (pickedTime == null) {
         return;
       } else {
         setState(() {
-          myAlarms[index].alarmTime = pickedTime;
+          myAlarms[index].alarmHour = pickedTime.hour;
+          myAlarms[index].alarmMin = pickedTime.minute;
+          DatabaseHelper.instance.updateDatabase(myAlarms[index]);
         });
       }
     });
@@ -85,7 +89,7 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
         .toUpperCase();
   }
 
-  Widget dayMaker(String today, bool enable, int index, int i) {
+  Widget dayMaker(String today, int enable, int index, int i) {
     return GestureDetector(
       onTap: () {
         if (isDeleteEnable != -1) {
@@ -100,6 +104,7 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
             myAlarms[index].alarmDays =
                 '${myAlarms[index].alarmDays.substring(0, i)}$today${myAlarms[index].alarmDays.substring(i + 1)}';
           }
+          DatabaseHelper.instance.updateDatabase(myAlarms[index]);
           setState(() {});
         }
       },
@@ -110,12 +115,12 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
             color: myAlarms[index].alarmDays[i] == today &&
-                    myAlarms[index].isEnable
+                    myAlarms[index].isEnable == 1
                 ? mainColor
                 : myAlarms[index].alarmDays[i] == today &&
-                        !myAlarms[index].isEnable
+                        myAlarms[index].isEnable == 0
                     ? mainColorDim
-                    : !myAlarms[index].isEnable
+                    : myAlarms[index].isEnable == 0
                         ? disabledColorDim
                         : disabledColor,
             borderRadius: BorderRadius.circular(45)),
@@ -124,7 +129,7 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
           today,
           style: TextStyle(
               fontSize: 10,
-              color: myAlarms[index].isEnable ? fontColor : fontColorDim
+              color: myAlarms[index].isEnable == 1 ? fontColor : fontColorDim
               // fontWeight: FontWeight.bold
               ),
         )),
@@ -134,6 +139,8 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
 
   @override
   Widget build(BuildContext context) {
+    myAlarms.sort((a, b) => a.alarmMin.compareTo(b.alarmMin));
+    myAlarms.sort((a, b) => a.alarmHour.compareTo(b.alarmHour));
     final double pageWidth = MediaQuery.of(context).size.width;
     final double pageHeight = MediaQuery.of(context).size.height;
     return SizedBox(
@@ -145,6 +152,7 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                 size: 200,
               )
             : ListView.builder(
+                padding: const EdgeInsets.all(0),
                 itemCount: myAlarms.length,
                 itemBuilder: (context, index) {
                   return InkWell(
@@ -169,7 +177,7 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                           myAlarms[i].isEditable = false;
                         }
                         myAlarms[index].isEditable = true;
-                        myAlarms[index].isEnable = true;
+                        myAlarms[index].isEnable = 1;
                       } else {
                         if (tempIndex != -1) {
                           myAlarms[tempIndex].isEnable = temp;
@@ -199,17 +207,25 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                             : Align(
                                 alignment: Alignment.centerRight,
                                 child: Tooltip(
-                                  waitDuration: Duration(seconds: 2),
+                                  waitDuration: const Duration(seconds: 2),
                                   message: "Toggle Enable",
                                   child: Switch(
-                                    value: myAlarms[index].isEnable,
+                                    value: myAlarms[index].isEnable == 1
+                                        ? true
+                                        : false,
                                     onChanged: (value) {
                                       if (isDeleteEnable != -1) {
                                         isDeleteEnable = -1;
                                         widget.remakeState(index);
                                       }
                                       tempIndex = -1;
-                                      myAlarms[index].isEnable = value;
+                                      if (value == true) {
+                                        myAlarms[index].isEnable = 1;
+                                      } else {
+                                        myAlarms[index].isEnable = 0;
+                                      }
+                                      DatabaseHelper.instance
+                                          .updateDatabase(myAlarms[index]);
                                       setState(() {});
                                     },
                                   ),
@@ -236,24 +252,29 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                                     children: [
                                       Text(
                                         currentTimeFormat(
-                                            myAlarms[index].alarmTime),
+                                          TimeOfDay(
+                                            hour: myAlarms[index].alarmHour,
+                                            minute: myAlarms[index].alarmMin,
+                                          ),
+                                        ),
                                         style: TextStyle(
-                                            color: myAlarms[index].isEnable
+                                            color: myAlarms[index].isEnable == 1
                                                 ? fontColor
                                                 : fontColorDim,
                                             fontSize: 28,
-                                            fontFamily: "TiltNeon"),
+                                            fontFamily: "WorkSans",
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
                                         width: 5,
                                       ),
                                       Text(
-                                        dayPeriodFun(myAlarms[index]
-                                            .alarmTime
-                                            .period
-                                            .toString()),
+                                        dayPeriodFun(TimeOfDay(
+                                          hour: myAlarms[index].alarmHour,
+                                          minute: myAlarms[index].alarmMin,
+                                        ).period.toString()),
                                         style: TextStyle(
-                                            color: myAlarms[index].isEnable
+                                            color: myAlarms[index].isEnable == 1
                                                 ? fontColor
                                                 : fontColorDim,
                                             fontSize: 14,
@@ -270,7 +291,7 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                                     ? Text(
                                         "One Time",
                                         style: TextStyle(
-                                            color: myAlarms[index].isEnable
+                                            color: myAlarms[index].isEnable == 1
                                                 ? fontColor
                                                 : fontColorDim,
                                             fontFamily: "TiltNeon"),
@@ -388,8 +409,8 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                        margin:
-                                            EdgeInsets.only(left: 10, top: 20),
+                                        margin: const EdgeInsets.only(
+                                            left: 10, top: 20),
                                         child: const Text(
                                           "Volume:",
                                           style: TextStyle(
@@ -425,6 +446,9 @@ class _MyAlarmsListState extends State<MyAlarmsList> {
                                               isDeleteEnable = -1;
                                               widget.remakeState(index);
                                             }
+                                            DatabaseHelper.instance
+                                                .updateDatabase(
+                                                    myAlarms[index]);
                                             setState(() {});
                                           },
                                         ),

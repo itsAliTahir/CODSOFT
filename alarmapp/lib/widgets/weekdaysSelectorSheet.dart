@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
+// ignore: must_be_immutable
 class MyWeekDaysSelector extends StatefulWidget {
   String tempWeekdays;
   Function weekdaysFun;
   Function remakeState;
-  MyWeekDaysSelector(this.tempWeekdays, this.weekdaysFun, this.remakeState);
+  MyWeekDaysSelector(this.tempWeekdays, this.weekdaysFun, this.remakeState,
+      {super.key});
 
   @override
   State<MyWeekDaysSelector> createState() => _MyWeekDaysSelectorState();
@@ -14,7 +16,6 @@ class MyWeekDaysSelector extends StatefulWidget {
 
 class _MyWeekDaysSelectorState extends State<MyWeekDaysSelector> {
   List<String> options = ["One Time", "Mon - Fri", "Everyday"];
-  @override
   Widget dayMaker(String today, int index, int i) {
     return GestureDetector(
       onTap: () {
@@ -24,7 +25,6 @@ class _MyWeekDaysSelectorState extends State<MyWeekDaysSelector> {
         } else {
           widget.tempWeekdays =
               '${widget.tempWeekdays.substring(0, i)}$today${widget.tempWeekdays.substring(i + 1)}';
-          print(widget.tempWeekdays);
         }
         widget.weekdaysFun(widget.tempWeekdays);
         widget.remakeState(-1);
@@ -45,7 +45,7 @@ class _MyWeekDaysSelectorState extends State<MyWeekDaysSelector> {
         child: Center(
             child: Text(
           today,
-          style: TextStyle(fontSize: 10, color: fontColor
+          style: const TextStyle(fontSize: 10, color: fontColor
               // fontWeight: FontWeight.bold
               ),
         )),
@@ -53,6 +53,7 @@ class _MyWeekDaysSelectorState extends State<MyWeekDaysSelector> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     double pageWidth = MediaQuery.of(context).size.width;
     int highlightIndex = -1;
@@ -73,15 +74,15 @@ class _MyWeekDaysSelectorState extends State<MyWeekDaysSelector> {
       margin: const EdgeInsets.only(bottom: 8, left: 20, right: 20),
       child: Column(children: [
         Container(
-          margin: EdgeInsets.all(3),
-          padding: EdgeInsets.only(left: 10),
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.only(left: 10),
           width: pageWidth,
           height: 64,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
+              const Text(
                 "Weekdays",
                 style: TextStyle(color: fontColorDim, fontFamily: "TiltNeon"),
               ),
@@ -104,7 +105,7 @@ class _MyWeekDaysSelectorState extends State<MyWeekDaysSelector> {
           color: primaryColor,
           height: 0,
         ),
-        Container(
+        SizedBox(
             width: pageWidth,
             height: 106,
             // color: Colors.amber,

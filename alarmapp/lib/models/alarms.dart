@@ -1,28 +1,96 @@
-import 'package:flutter/material.dart';
-
 class Alarms {
   final String? id;
-  TimeOfDay alarmTime;
+  int alarmHour;
+  int alarmMin;
   String alarmDays;
   String alarmTone;
-  bool isEnable;
+  int isEnable;
   double volume;
-  bool isEditable;
-  Alarms(this.id, this.alarmTime, this.alarmDays, this.alarmTone, this.isEnable,
-      this.volume, this.isEditable);
+  bool isEditable = false;
+  Alarms(
+      {required this.id,
+      required this.alarmHour,
+      required this.alarmMin,
+      required this.alarmDays,
+      required this.alarmTone,
+      required this.isEnable,
+      required this.volume,
+      required this.isEditable});
+
+  factory Alarms.fromMap(Map<String, dynamic> json) => Alarms(
+        id: json['ID'],
+        alarmHour: json['Hour'],
+        alarmMin: json['MIN'],
+        alarmDays: json['DAYS'],
+        alarmTone: json['TONE'],
+        isEnable: json['isEnable'],
+        volume: json['Volume'],
+        isEditable: false,
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'ID': id,
+      'Hour': alarmHour,
+      'MIN': alarmMin,
+      'DAYS': alarmDays,
+      'TONE': alarmTone,
+      'isEnable': isEnable,
+      'Volume': volume,
+    };
+  }
 }
 
 List<Alarms> myAlarms = [
-  Alarms("0", TimeOfDay.now(), "MTWTFSS", AvailableTones[0], true, 70, false),
-  Alarms("1", TimeOfDay.now(), "-TW-F--", AvailableTones[1], true, 70, false),
-  Alarms("2", TimeOfDay.now(), "-------", AvailableTones[2], false, 70, false),
-  Alarms("3", TimeOfDay.now(), "MTWTF--", AvailableTones[3], false, 70, false),
-  Alarms("4", TimeOfDay.now(), "---T---", AvailableTones[4], false, 70, false),
+  // Alarms(
+  //     id: "0",
+  //     alarmHour: 10,
+  //     alarmMin: 30,
+  //     alarmDays: "MTWTFSS",
+  //     alarmTone: AvailableTones[0],
+  //     isEnable: 1,
+  //     volume: 70,
+  //     isEditable: false),
+  // Alarms(
+  //     id: "0",
+  //     alarmHour: 10,
+  //     alarmMin: 30,
+  //     alarmDays: "-----SS",
+  //     alarmTone: AvailableTones[2],
+  //     isEnable: 1,
+  //     volume: 70,
+  //     isEditable: false),
+  // Alarms(
+  //     id: "0",
+  //     alarmHour: 10,
+  //     alarmMin: 30,
+  //     alarmDays: "-------",
+  //     alarmTone: AvailableTones[1],
+  //     isEnable: 0,
+  //     volume: 70,
+  //     isEditable: false),
+  // Alarms(
+  //     id: "0",
+  //     alarmHour: 10,
+  //     alarmMin: 30,
+  //     alarmDays: "MTWTF--",
+  //     alarmTone: AvailableTones[0],
+  //     isEnable: 1,
+  //     volume: 70,
+  //     isEditable: false),
 ];
-List<String> AvailableTones = [
-  'Morning Routine',
-  'One Step Forward',
-  'Tone 3',
-  'Tone 4',
-  'Tone 5',
+
+class Tones {
+  final String name;
+  final String file;
+  Tones(this.name, this.file);
+}
+
+// ignore: constant_identifier_names, non_constant_identifier_names
+List<Tones> AvailableTones = [
+  Tones("Daily Routine", "daily_routine"),
+  Tones("Dusk Till Dawn", "dusk_till_dawn"),
+  Tones("Little Do You Know", "little_do_you_know"),
+  Tones("One Step Forward", "one_step_forward"),
+  Tones("Say Yes To Heaven", "say_yes_to_heaven"),
 ];
