@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist_app/constants.dart';
 import 'package:todolist_app/provider/dataprovider.dart';
-
 import '../helper/databasehelper.dart';
 
 class MySplashScreen extends StatefulWidget {
@@ -29,7 +28,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       Provider.of<ProviderClass>(context).initializeList();
       buildScreen++;
     }
-
+    // done apps
     DatabaseHelper.instance.getData();
     return Scaffold(
         body: Container(

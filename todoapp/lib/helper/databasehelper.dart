@@ -52,7 +52,7 @@ class DatabaseHelper {
 
   Future<int> deleteFromDatabase(MyTasks task) async {
     Database db = await instance.database;
-    print("deleting: ${task.title}");
+
     return await db.delete(
       'Tasks',
       where: 'Title = ? ',

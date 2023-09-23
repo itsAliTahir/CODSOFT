@@ -15,7 +15,7 @@ class MyTasks {
       required this.isSelected,
       required this.repeatType});
 
-  factory MyTasks.fromMap(Map<String, dynamic> json) => new MyTasks(
+  factory MyTasks.fromMap(Map<String, dynamic> json) => MyTasks(
         title: json['Title'],
         description: json['Description'],
         category: json['Category'],
