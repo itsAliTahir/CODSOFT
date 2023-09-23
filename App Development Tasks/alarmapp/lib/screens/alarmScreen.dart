@@ -58,7 +58,7 @@ class _MyAlarmScreenState extends State<MyAlarmScreen> {
               padding: EdgeInsets.only(top: pageHeight * 0.13),
               child: Align(
                   alignment: Alignment.topCenter,
-                  child: Container(
+                  child: SizedBox(
                     width: 160,
                     height: 50,
                     child: Row(
