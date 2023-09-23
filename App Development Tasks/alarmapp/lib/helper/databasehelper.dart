@@ -3,7 +3,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
-import '../models/datamodels.dart';
+
+import '../models/alarms.dart';
 
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
@@ -14,7 +15,7 @@ class DatabaseHelper {
 
   Future<Database> initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'myDataBase.db');
+    String path = join(documentsDirectory.path, 'myAlarmsDatabase.db');
     return await openDatabase(
       path,
       version: 1,
@@ -25,46 +26,47 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute(
       '''
-      CREATE TABLE Tasks (
-        Title TEXT NOT NULL,
-        Description TEXT,
-        Category TEXT,
-        isCompleted INTEGER,
-        Repeat INTEGER
+      CREATE TABLE MyAlarms (
+        ID STRING NOT NULL,
+        Hour INTEGER NOT NULL,
+        MIN INTEGER NOt NULL,
+        DAYS STRING NOT NULL,
+        TONE STRING NOT NULL,
+        isEnable INTEGER,
+        Volume DOUBLE
       )
     ''',
     );
   }
 
-  Future<List<MyTasks>> getData() async {
+  Future<List<Alarms>> getData() async {
     Database db = await instance.database;
-    var groceries = await db.query('Tasks');
-    List<MyTasks> groceryList = groceries.isNotEmpty
-        ? groceries.map((c) => MyTasks.fromMap(c)).toList()
-        : [];
-    return groceryList;
+    var alarms = await db.query('MyAlarms');
+    List<Alarms> alarmsList =
+        alarms.isNotEmpty ? alarms.map((c) => Alarms.fromMap(c)).toList() : [];
+    return alarmsList;
   }
 
-  Future<int> addIntoDatabase(MyTasks task) async {
+  Future<int> addIntoDatabase(Alarms alarm) async {
+    print("one new entry");
     Database db = await instance.database;
-    return await db.insert('Tasks', task.toMap());
+    return await db.insert('MyAlarms', alarm.toMap());
   }
 
-  Future<int> deleteFromDatabase(MyTasks task) async {
+  Future<int> deleteFromDatabase(Alarms alarm) async {
     Database db = await instance.database;
-
     return await db.delete(
-      'Tasks',
-      where: 'Title = ? ',
+      'MyAlarms',
+      where: 'ID = ? ',
       whereArgs: [
-        task.title,
+        alarm.id,
       ],
     );
   }
 
-  Future<int> updateDatabase(MyTasks task, MyTasks update) async {
+  Future<int> updateDatabase(Alarms alarm) async {
     Database db = await instance.database;
-    return await db.update('Tasks', update.toMap(),
-        where: "Title = ?", whereArgs: [task.title]);
+    return await db.update('MyAlarms', alarm.toMap(),
+        where: "ID= ?", whereArgs: [alarm.id]);
   }
 }

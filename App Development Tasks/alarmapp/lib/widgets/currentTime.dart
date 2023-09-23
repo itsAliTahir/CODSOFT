@@ -1,15 +1,53 @@
+import 'dart:async';
+
 import 'package:alarmapp/constants.dart';
+import 'package:alarmapp/models/alarms.dart';
+import 'package:alarmapp/screens/alarmScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class MyCurrentTime extends StatefulWidget {
-  const MyCurrentTime({super.key});
+  Function remakeState;
+  MyCurrentTime(this.remakeState, {super.key});
 
   @override
   State<MyCurrentTime> createState() => _MyCurrentTimeState();
 }
 
 class _MyCurrentTimeState extends State<MyCurrentTime> {
+  TimeOfDay currentTime = TimeOfDay.now();
+
+  @override
+  void initState() {
+    super.initState();
+    timerStream = Stream.periodic(const Duration(seconds: 1), (i) => i);
+    timerSubscription = timerStream.listen((_) {
+      setState(() {
+        currentTime = TimeOfDay.now();
+      });
+      for (int i = 0; i < myAlarms.length; i++) {
+        if (myAlarms[i].isEditable == false &&
+            myAlarms[i].isEnable == 1 &&
+            currentTime.hour == myAlarms[i].alarmHour &&
+            currentTime.minute == myAlarms[i].alarmMin) {
+          timerSubscription.pause();
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return MyAlarmScreen(myAlarms[i], i, widget.remakeState);
+            },
+          ));
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    timerSubscription.cancel();
+    super.dispose();
+  }
+
   String currentTimeFormat(TimeOfDay time) {
     String returnHour = time.hour.toString();
     String returnMin = time.minute.toString();
@@ -39,8 +77,6 @@ class _MyCurrentTimeState extends State<MyCurrentTime> {
   @override
   Widget build(BuildContext context) {
     final double pageWidth = MediaQuery.of(context).size.width;
-    final double pageHeight = MediaQuery.of(context).size.height;
-
     return Container(
       padding: const EdgeInsets.all(10),
       width: pageWidth,
@@ -62,12 +98,12 @@ class _MyCurrentTimeState extends State<MyCurrentTime> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                currentTimeFormat(TimeOfDay.now()),
+                currentTimeFormat(currentTime),
                 style: const TextStyle(
                     color: fontColor,
-                    // fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.bold,
                     fontSize: 48,
-                    fontFamily: "TiltNeon"),
+                    fontFamily: "WorkSans"),
               ),
               const SizedBox(
                 width: 5,
@@ -75,7 +111,7 @@ class _MyCurrentTimeState extends State<MyCurrentTime> {
               Column(
                 children: [
                   Text(
-                    dayPeriodFun(TimeOfDay.now().period.toString()),
+                    dayPeriodFun(currentTime.period.toString()),
                     style: const TextStyle(
                         color: fontColor,
                         // fontWeight: FontWeight.bold,

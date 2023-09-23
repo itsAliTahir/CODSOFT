@@ -1,11 +1,13 @@
 import 'package:alarmapp/constants.dart';
 import 'package:alarmapp/models/alarms.dart';
 import 'package:flutter/material.dart';
+import '../helper/databasehelper.dart';
 
+// ignore: must_be_immutable
 class MyEditRingtoneSheet extends StatefulWidget {
   int i;
   Function remakeState;
-  MyEditRingtoneSheet(this.i, this.remakeState);
+  MyEditRingtoneSheet(this.i, this.remakeState, {super.key});
 
   @override
   State<MyEditRingtoneSheet> createState() => _MyEditRingtoneSheetState();
@@ -13,6 +15,7 @@ class MyEditRingtoneSheet extends StatefulWidget {
 
 class _MyEditRingtoneSheetState extends State<MyEditRingtoneSheet> {
   int highlighIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     double pageWidth = MediaQuery.of(context).size.width;
@@ -30,12 +33,19 @@ class _MyEditRingtoneSheetState extends State<MyEditRingtoneSheet> {
               itemCount: AvailableTones.length,
               itemBuilder: (context, index) {
                 if (widget.i != -1) {
-                  highlighIndex = -1;
+                  for (int i = 0; i < AvailableTones.length; i++) {
+                    if (myAlarms[widget.i].alarmTone ==
+                        AvailableTones[i].name) {
+                      highlighIndex = i;
+                    }
+                  }
                 }
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (widget.i != -1) {
-                      myAlarms[widget.i].alarmTone = AvailableTones[index];
+                      myAlarms[widget.i].alarmTone = AvailableTones[index].name;
+                      DatabaseHelper.instance
+                          .updateDatabase(myAlarms[widget.i]);
                       setState(() {});
                       widget.remakeState(index);
                     } else {
@@ -58,7 +68,7 @@ class _MyEditRingtoneSheetState extends State<MyEditRingtoneSheet> {
                       height: 24,
                       width: pageWidth,
                       child: Text(
-                        AvailableTones[index],
+                        AvailableTones[index].name,
                         style: TextStyle(
                             color: (widget.i != -1 &&
                                         myAlarms[widget.i].alarmTone ==

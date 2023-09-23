@@ -36,7 +36,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   intl: ^0.18.1
-  lite_rolling_switch: ^1.0.1
   sqflite: ^2.3.0
   path_provider: ^2.1.1
   uuid: ^4.0.0
@@ -65,7 +64,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   # assets:
-  #   - images/a_dot_burr.jpeg
+    # - images/a_dot_burr.jpeg
+    # - assets/daily_routine.mp3
+    # - assets/dusk_till_dawn.mp3
+    # - assets/little_do_you_know.mp3
+    # - assets/one_step_forward.mp3
+    # - assets/say_yes_to_heaven.mp3
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -83,6 +87,18 @@ flutter:
     - family: TiltNeon
       fonts:
         - asset: assets/TiltNeon-Regular.ttf
+
+    - family: digital-7
+      fonts:        
+        - asset: assets/digital-7.ttf
+
+    - family: WorkSans
+      fonts:         
+        - asset: assets/WorkSans-ExtraLight.ttf
+
+    - family: Pacifico
+      fonts:
+        - asset: assets/Pacifico-Regular.ttf  
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

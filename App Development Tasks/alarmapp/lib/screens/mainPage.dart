@@ -1,3 +1,4 @@
+import 'package:alarmapp/helper/databasehelper.dart';
 import 'package:alarmapp/models/alarms.dart';
 import 'package:alarmapp/widgets/addAlarmDialog.dart';
 import 'package:alarmapp/widgets/ringtoneSelectorSheet.dart';
@@ -36,6 +37,7 @@ class _MyMainPageState extends State<MyMainPage> {
 
     void deleteAlarmFun() {
       if (toDeleteIndex != -1) {
+        DatabaseHelper.instance.deleteFromDatabase(myAlarms[toDeleteIndex]);
         myAlarms.removeAt(toDeleteIndex);
       }
       setState(() {});
@@ -63,11 +65,21 @@ class _MyMainPageState extends State<MyMainPage> {
         color: primaryColor,
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 22,
             ),
-            MyCurrentTime(),
+            MyCurrentTime(remakeState),
+            Container(
+              height: 0.2,
+              width: pageWidth,
+              color: Colors.black,
+            ),
             MyAlarmsList(editRingtuneFun, remakeState),
+            Container(
+              height: 0.2,
+              width: pageWidth,
+              color: Colors.black,
+            ),
           ],
         ),
       ),

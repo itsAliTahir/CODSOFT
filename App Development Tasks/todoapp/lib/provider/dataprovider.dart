@@ -91,7 +91,6 @@ class ProviderClass with ChangeNotifier {
   }
 
   void deleteItem(int index) {
-    print(_myTasksList[index].title);
     DatabaseHelper.instance.deleteFromDatabase(_myTasksList[index]);
     _myTasksList.removeAt(index);
     notifyListeners();

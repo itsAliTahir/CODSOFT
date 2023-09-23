@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 const MaterialColor materialColor = Colors.blue;
@@ -15,7 +16,10 @@ const Color dangerColor = Colors.red;
 const Color dangerColorDim = Color.fromARGB(66, 255, 82, 82);
 
 // Variables
-bool temp = false;
+int temp = 0;
 int tempIndex = -1;
 int isDeleteEnable = -1;
 int toDeleteIndex = -1;
+
+late Stream<int> timerStream;
+late StreamSubscription<int> timerSubscription;
